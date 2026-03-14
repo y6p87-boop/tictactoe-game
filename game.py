@@ -27,7 +27,7 @@ class TicTacToe:
         title = tk.Label(self.root, text="Tic-Tac-Toe", font=("Arial", 20, "bold"), bg="#f0f0f0")
         title.grid(row=0, column=0, columnspan=3, pady=10)
 
-        self.status_label = tk.Label(self.root, text=f"Player {self.current_player}'s turn", font=("Arial", 13), bg="#f0f0f0")
+        self.status_label = tk.Label(self.root, text=f"Player {self.current_player}'s turn", font=("Arial", 13), bg="#f0f0f0", fg="green")
         self.status_label.grid(row=1, column=0, columnspan=3)
 
         # Score display
