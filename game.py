@@ -60,6 +60,7 @@ class TicTacToe:
 
         if self.check_winner():
             self.tracker.record_win(self.current_player)
+            self.status_label.config(text=f"🎉 Player {self.current_player} wins!")
             self.score_label.config(text=self.tracker.get_scores())
             messagebox.showinfo("Game Over", f"Player {self.current_player} wins!")
             self.restart()
