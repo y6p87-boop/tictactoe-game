@@ -2,6 +2,7 @@
 
 import tkinter as tk
 from tkinter import messagebox
+from score_tracker import ScoreTracker
 
 # --- Constants ---
 PLAYER_X = "X"
@@ -9,7 +10,7 @@ PLAYER_O = "O"
 EMPTY = ""
 
 class TicTacToe:
-    """Main Tic-Tac-Toe game class using tkinter GUI."""
+    """Main Tic-Tac-Toe game class with score tracking."""
 
     def __init__(self, root):
         self.root = root
@@ -18,6 +19,7 @@ class TicTacToe:
         self.current_player = PLAYER_X
         self.board = [EMPTY] * 9
         self.buttons = []
+        self.tracker = ScoreTracker()
         self.build_gui()
 
     def build_gui(self):
@@ -28,17 +30,25 @@ class TicTacToe:
         self.status_label = tk.Label(self.root, text=f"Player {self.current_player}'s turn", font=("Arial", 13), bg="#f0f0f0")
         self.status_label.grid(row=1, column=0, columnspan=3)
 
+        # Score display
+        self.score_label = tk.Label(self.root, text=self.tracker.get_scores(), font=("Arial", 11), fg="blue", bg="#f0f0f0")
+        self.score_label.grid(row=2, column=0, columnspan=3)
+
         for i in range(9):
             btn = tk.Button(
                 self.root, text="", font=("Arial", 24, "bold"),
                 width=5, height=2,
                 command=lambda i=i: self.on_click(i)
             )
-            btn.grid(row=(i // 3) + 2, column=i % 3, padx=5, pady=5)
+            btn.grid(row=(i // 3) + 3, column=i % 3, padx=5, pady=5)
             self.buttons.append(btn)
 
-        restart_btn = tk.Button(self.root, text="Restart", font=("Arial", 12), command=self.restart)
-        restart_btn.grid(row=5, column=0, columnspan=3, pady=10)
+        # Restart and Reset Score buttons
+        restart_btn = tk.Button(self.root, text="Restart Game", font=("Arial", 12), command=self.restart)
+        restart_btn.grid(row=6, column=0, columnspan=2, pady=10)
+
+        reset_score_btn = tk.Button(self.root, text="Reset Scores", font=("Arial", 12), command=self.reset_scores)
+        reset_score_btn.grid(row=6, column=2, pady=10)
 
     def on_click(self, index):
         """Handle a cell click."""
@@ -49,9 +59,13 @@ class TicTacToe:
         self.buttons[index].config(text=self.current_player)
 
         if self.check_winner():
+            self.tracker.record_win(self.current_player)
+            self.score_label.config(text=self.tracker.get_scores())
             messagebox.showinfo("Game Over", f"Player {self.current_player} wins!")
             self.restart()
         elif EMPTY not in self.board:
+            self.tracker.record_draw()
+            self.score_label.config(text=self.tracker.get_scores())
             messagebox.showinfo("Game Over", "It's a draw!")
             self.restart()
         else:
@@ -77,6 +91,11 @@ class TicTacToe:
         self.status_label.config(text=f"Player {self.current_player}'s turn")
         for btn in self.buttons:
             btn.config(text="")
+
+    def reset_scores(self):
+        """Reset all scores to zero."""
+        self.tracker.reset()
+        self.score_label.config(text=self.tracker.get_scores())
 
 
 if __name__ == "__main__":
