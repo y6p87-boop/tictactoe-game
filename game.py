@@ -13,7 +13,7 @@ class TicTacToe:
 
     def __init__(self, root):
         self.root = root
-        self.root.title("Tic-Tac-Toe")
+        self.root.title("Tic-Tac-Toe | Two Player Game")
         self.root.configure(bg="#f0f0f0")
         self.current_player = PLAYER_X
         self.board = [EMPTY] * 9
